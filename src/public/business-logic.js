@@ -76,6 +76,10 @@ SC.initialize({
                 return songCache[songId]['comment_array'];
             });
         };
+
+        this.addSentiment = function(songId, sentiment) {
+            songCache[songId]['sentiment'] = sentiment;
+        };
     };
 
     window.store = new DataStore();
@@ -105,7 +109,7 @@ SC.initialize({
             store.getArtistInfo(songId, song.user_id); 
             $('.analyze-list').append('<li data-id="'+song.id+'">'+song.title+"</li>");
             store.getCommentsBySong(songId).then(function(comments) {
-                console.log('Got', comments.length, 'comments');
+                // console.log('Got', comments.length, 'comments');
                 for (var i = 0; i < comments.length; i++) {
                     var promise = new Promise(function(resolve, reject) {
                         $.ajax({
@@ -126,7 +130,7 @@ SC.initialize({
                                 data = JSON.parse(data);
                                 if (data["status"] === "OK") {
                                     resolve(data);
-                                    console.log("success data: ", data);
+                                    // console.log("success data: ", data);
                                 } else if (data["status"] === "ERROR") {
                                     reject(data);
                                     console.log("error data: ",data);
@@ -138,45 +142,33 @@ SC.initialize({
                             }
                         });
                     });
-                    sentimentPromises.push(sentiment);
+                    sentimentPromises.push(promise);
                 }
                 return Promise.all(sentimentPromises);
-            }).then(function(sentimentArray) {
-                console.log(sentimentArray);
+            }).then(function(updateSentiment) {
+                console.log(updateSentiment);
+                console.log(updateSentiment.length);
+                console.log(updateSentiment[0].keywords[4].text);
+                var positive = [];
+                var negative = [];
+                var neutral = [];
+                for (var i = 0; i < updateSentiment.length; i++) {
+                    for (var j = 0; j < 50; j++) {
+                        if (updateSentiment[i].keywords[j].sentiment.type === "positive") {
+                            positive.push(updateSentiment[i].keywords[j].text);
+                        } else if (updateSentiment[i].keywords[j].sentiment.type === "negative") {
+                            negative.push(updateSentiment[i].keywords[j].text);
+                        } else if (updateSentiment[i].keywords[j].sentiment.type === "neutral") {
+                            neutral.push(updateSentiment[i].keywords[j].text);
+                        }
+                    }
+                }
+                sentimentsArray.push(positive);
+                sentimentsArray.push(negative);
+                sentimentsArray.push(neutral);
+                store.addSentiment(songId, sentimentsArray);
+                console.log(song);
             });
-
-
-            // window.setTimeout(function() {
-            //     // console.log(song['comment_string']);
-            // $.ajax({
-            //     url: '/proxy',
-            //     dataType: 'json',
-            //     // jsonp: 'jsonp',
-            //     type: 'post',
-            //     contentType: 'application/javascript',
-            //     data: JSON.stringify({
-            //         apikey: g.alchemy_id,
-            //         // text: "test",
-            //         text: song.comment_string,
-            //         outputMode: 'json',
-            //         url: 'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords',
-            //         sentiment: 1
-            //     }),
-            //     success: function(data) {
-            //         data = JSON.parse(data);
-            //         if (data["status"] === "OK") {
-            //             console.log("success data: ", data);
-            //         } else if (data["status"] === "ERROR") {
-            //             console.log("error data: ",data);
-            //         }
-            //     }, 
-            //     error: function(jqxhr) {
-            //         console.log("error data2: ", jqxhr);
-            //     }
-            
-            // });
-            // }, 5000);
-            // console.log(song);
         };
 
         this.analyzeSongs = function(songIds) { 
@@ -197,21 +189,13 @@ SC.initialize({
             var filter = com.join(" ");
             var filter2 = filter.replace(/[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
             var filter3 = filter2.replace(/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?/ig, '');
-            // console.log(filter3);
-            // var comments = []
-            // comments.push(filter3);
-
             var stringLength = Math.floor(filter3.length / 5000);
-            // console.log("filter", stringLength);
             var commentArray = []
+
             for (var i = 0; i < stringLength; i++) {
                 commentArray.push(filter3.slice(i * 5000, (i + 1) * 5000));
             }
-            // filter4 = filter3.slice(0,5000);
-            // console.log(commentArray);
             return commentArray;
-            // return comments;
-
         };
 
         this.timeStamp = function(comments) {
