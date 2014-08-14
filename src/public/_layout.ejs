@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SoundSense</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/main.css">
+          <!-- If you are using the CSS version, only link these 2 files, you may add app.css to use for your overrides if you like -->
+        <!-- <script src="jquery-1.11.1.min.js"></script>
+        <script src="jquery.js"></script> 
+        <script src="jquery.steps.js"></script> -->
+        <link type="text/css" rel="Stylesheet" href="css/bjqs.css" />
+        
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/foundation.css">
+        <link rel="stylesheet" href="css/normalize.css">
+
+        <!-- If you are using the gem version, you need this only -->
+        <link rel="stylesheet" href="css/main.css">
+
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+
+        <script type="text/javascript">
+        var g = {
+            client_id: "<%= process.env.SOUNDCLOUD_CLIENT_ID %>",
+            alchemy_id: "<%= process.env.ALCHEMY_ID %>"
+        };
+        </script>
+        <script src="http://connect.soundcloud.com/sdk.js"></script>
+        <script src="js/vendor/modernizr.js"></script>
+        
+    </head>
+    <body>
+      <!-- body goes here -->
+    <div class="nav">
+        <span>
+            <ul class="topbarstuff">
+                <img style="z-index:-1" class="logo" src="images/logo.png" alt="soundsense-logo" width="100" height="100">
+                <li class="logo" "navtext">SOUNDSENSE</li>
+                <li><a class="navtext" href="#SEARCH">EXPLORE</a></li>
+                <li><a class="navtext" href="#SEARCH">SEARCH</a></li>
+                <li><a class="navtext" href="#SEARCH"> HOME</a></li>
+            </ul>
+        </span>
+    </div>
+
+<div class="row">
+
+    <div class="coverimage">
+        <%- yield %>
+    </div>
+
+</div>
+    
+
+    <script type="text/javascript" src="Chart.min.js"></script>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/bjqs-1.3.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script type="text/javascript" src="business-logic.js"></script>
+    <script type="text/javascript" src="presentation-ui.js"></script>
+  <script>
+    $(document).foundation();
+  </script>
+  <script>
+    $(document).ready(function() {
+        $('#my-slideshow').bjqs({
+            'height' : 600,
+            'width' : 800,
+            'responsive' : true
+        });
+    });
+    </script>
+</body>
+</html>
