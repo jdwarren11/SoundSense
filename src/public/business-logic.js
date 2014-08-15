@@ -149,26 +149,17 @@ SC.initialize({
                 // console.log(updateSentiment);
                 // console.log(updateSentiment.length);
                 // console.log(updateSentiment[0].keywords[4].text);
-                // var positive = [];
-                // var negative = [];
-                // var neutral = [];
                 for (var i = 0; i < updateSentiment.length; i++) {
                     for (var j = 0; j < 50; j++) {
                         if (updateSentiment[i].keywords[j].sentiment.type === "positive") {
-                            // positive.push(updateSentiment[i].keywords[j].text);
                             sentimentsArray[0].push(updateSentiment[i].keywords[j].text)
                         } else if (updateSentiment[i].keywords[j].sentiment.type === "negative") {
-                            // negative.push(updateSentiment[i].keywords[j].text);
                             sentimentsArray[1].push(updateSentiment[i].keywords[j].text)
                         } else if (updateSentiment[i].keywords[j].sentiment.type === "neutral") {
-                            // neutral.push(updateSentiment[i].keywords[j].text);
                             sentimentsArray[2].push(updateSentiment[i].keywords[j].text)
                         }
                     }
                 }
-                // sentimentsArray.push(positive);
-                // sentimentsArray.push(negative);
-                // sentimentsArray.push(neutral);
                 store.addSentiment(songId, sentimentsArray);
                 console.log(song);
             });
@@ -306,14 +297,21 @@ SC.initialize({
 
         this.chartData = function(songs) {
             var songTitles = [];
-            var playFollowData = [];
-            var playLikeData = [];
-            var followLikeData = [];
+            // var playFollowData = [];
+            // var playLikeData = [];
+            // var followLikeData = [];
+            var positive = [];
+            var negative = [];
+            var neutral = [];
+
             for (var i = 0; i < songs.length; i++) {
                 songTitles.push(songs[i]['title']);
-                playFollowData.push(songs[i].playback_count / songs[i].followers);
-                playLikeData.push(songs[i].playback_count / songs[i].favoritings_count);
-                followLikeData.push(songs[i].followers / songs[i].favoritings_count);
+                positive.push(songs[i].sentiment[0].length)
+                negative.push(songs[i].sentiment[1].length)
+                neutral.push(songs[i].sentiment[2].length)
+                // playFollowData.push(songs[i].playback_count / songs[i].followers);
+                // playLikeData.push(songs[i].playback_count / songs[i].favoritings_count);
+                // followLikeData.push(songs[i].followers / songs[i].favoritings_count);
             }
 
             var playsChartData = $.map(songs, function(series) {
@@ -348,7 +346,7 @@ SC.initialize({
                     ]
                 };
             });
-            
+
 
             var plays = new Highcharts.Chart({
                 chart: {
@@ -405,163 +403,36 @@ SC.initialize({
                     }
                 },
                 series: commentChartData
-            })
+            });
 
-            // $('#line').highcharts({
-            //     chart: { type: 'line' },
-            //     title: { text: 'comments' },
-            //     xAxis: { categories: [0,15,30,45,60] },
-            //     yAxis: { 
-            //         title: {
-            //             text: "comments/time"
-            //         }
-            //     },
-            //     series: [{
-            //         name: "something",
-            //         data: [100,200,250,234]
-            //     }]
-            // });
+            var sentiment = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'sentiment',
+                    type: 'bar'
+                },
+                title: {
+                    text: 'something else'
+                },
+                xAxis: {
+                    categories: songTitles
+                },
+                yAxis: {
+                    title: {
+                        text: 'something else'
+                    }
+                },
+                series: [{
+                    name: 'positive',
+                    data: positive
+                }, {
+                    name: 'negative',
+                    data: negative
+                }, {
+                    name: 'neutral',
+                    data: neutral
+                }]
+            });
         };
-
-        this.barChartData = function(songs) {
-            // console.log(songs)
-            var songTitles = [];
-            var playFollowData = [];
-            var playLikeData = [];
-            var followLikeData = [];
-            for (var i = 0; i < songs.length; i++) {
-                songTitles.push(songs[i]['title']);
-                playFollowData.push(songs[i].playback_count / songs[i].followers);
-                playLikeData.push(songs[i].playback_count / songs[i].favoritings_count);
-                followLikeData.push(songs[i].followers / songs[i].favoritings_count);
-            }
-
-
-            var pfData = {
-                labels: songTitles,
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        // fillColor: "rgba(220,220,220,0.5)",
-                        fillColor: "blue",
-                        // strokeColor: "rgba(220,220,220,0.8)",
-                        strokeColor: "red",
-                        // highlightFill: "rgba(220,220,220,0.75)",
-                        highlightFill: "green",
-                        // highlightStroke: "rgba(220,220,220,1)",
-                        highlightStroke: "black",
-                        data: playFollowData
-                    }
-                ]
-            };
-            var pfCtx = document.getElementById("play-follow").getContext('2d');
-            new Chart(pfCtx).Bar(pfData);
-            // return barData;
-
-            var plData = {
-                labels: songTitles,
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        fillColor: "rgba(220,220,220,0.5)",
-                        strokeColor: "rgba(220,220,220,0.8)",
-                        highlightFill: "rgba(220,220,220,0.75)",
-                        highlightStroke: "rgba(220,220,220,1)",
-                        data: playLikeData
-                    }
-                ]
-            };
-            var plCtx = document.getElementById("play-like").getContext('2d');
-            new Chart(plCtx).Bar(plData)
-
-            var flData = {
-                labels: songTitles,
-                datasets: [
-                    {
-                        label: "My First dataset",
-                        fillColor: "rgba(220,220,220,0.5)",
-                        strokeColor: "rgba(220,220,220,0.8)",
-                        highlightFill: "rgba(220,220,220,0.75)",
-                        highlightStroke: "rgba(220,220,220,1)",
-                        data: followLikeData
-                    }
-                ]
-            };
-            var flCtx = document.getElementById("follow-like").getContext('2d');
-            new Chart(flCtx).Bar(flData)
-
-
-        //     var commentData = [];
-        //     for (var i = 0; i < songs.length; i++) {
-        //         commentData.push(songs[i]['comment_times']);
-        //     }
-        //     console.log(commentData);
-
-        //     var s1 = songs[0]['comment_times'];
-        //     var s2 = songs[1]['comment_times'];
-        //     var s3 = songs[2]['comment_times'];
-        //     var s4 = songs[3]['comment_times'];
-        //     var comData = {
-        //         labels: [0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300],
-        //         datasets: [
-        //             {
-        //                 fillColor : "rgba(172,194,132,0.4)",
-        //                 strokeColor : "#ACC26D",
-        //                 pointColor : "#fff",
-        //                 pointStrokeColor : "#9DB86D",
-        //                 data : [
-        //                     s1['15'],s1['30'],s1['45'],s1['60'],
-        //                     s1['75'],s1['90'],s1['105'],s1['120'],
-        //                     s1['135'],s1['150'],s1['165'],s1['180'],
-        //                     s1['195'],s1['210'],s1['225'],s1['240'],
-        //                     s1['255'],s1['270'],s1['285'],s1['300']
-        //                 ]
-        //             },
-        //             {
-        //                 fillColor : "rgba(172,194,132,0.4)",
-        //                 strokeColor : "#ACC26D",
-        //                 pointColor : "#fff",
-        //                 pointStrokeColor : "#9DB86D",
-        //                 data : [
-        //                     s2['15'],s2['30'],s2['45'],s2['60'],
-        //                     s2['75'],s2['90'],s2['105'],s2['120'],
-        //                     s2['135'],s2['150'],s2['165'],s2['180'],
-        //                     s2['195'],s2['210'],s2['225'],s2['240'],
-        //                     s2['255'],s2['270'],s2['285'],s2['300']
-        //                 ]
-        //             },
-        //             {
-        //                 fillColor : "rgba(172,194,132,0.4)",
-        //                 strokeColor : "#ACC26D",
-        //                 pointColor : "#fff",
-        //                 pointStrokeColor : "#9DB86D",
-        //                 data : [
-        //                     s3['15'],s3['30'],s3['45'],s3['60'],
-        //                     s3['75'],s3['90'],s3['105'],s3['120'],
-        //                     s3['135'],s3['150'],s3['165'],s3['180'],
-        //                     s3['195'],s3['210'],s3['225'],s3['240'],
-        //                     s3['255'],s3['270'],s3['285'],s3['300']
-        //                 ]
-        //             },
-        //             {
-        //                 fillColor : "rgba(172,194,132,0.4)",
-        //                 strokeColor : "#ACC26D",
-        //                 pointColor : "#fff",
-        //                 pointStrokeColor : "#9DB86D",
-        //                 data : [
-        //                     s4['15'],s4['30'],s4['45'],s4['60'],
-        //                     s4['75'],s4['90'],s4['105'],s4['120'],
-        //                     s4['135'],s4['150'],s4['165'],s4['180'],
-        //                     s4['195'],s4['210'],s4['225'],s4['240'],
-        //                     s4['255'],s4['270'],s4['285'],s4['300']
-        //                 ]
-        //             }
-        //         ]
-        //     };
-        //     var comCtx = document.getElementById("comments").getContext('2d');
-        //     new Chart(comCtx).Line(comData)
-        };
-
     };
 
     window.bl = new BusinessLogic();
