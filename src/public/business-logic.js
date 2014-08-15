@@ -105,7 +105,7 @@ SC.initialize({
         this.addSong = function(songId) {
             var song = store.getSongById(songId);
             var sentimentPromises = [];
-            var sentimentsArray = [];
+            var sentimentsArray = [[],[],[]];
             store.getArtistInfo(songId, song.user_id); 
             $('.analyze-list').append('<li data-id="'+song.id+'">'+song.title+"</li>");
             store.getCommentsBySong(songId).then(function(comments) {
@@ -146,26 +146,29 @@ SC.initialize({
                 }
                 return Promise.all(sentimentPromises);
             }).then(function(updateSentiment) {
-                console.log(updateSentiment);
-                console.log(updateSentiment.length);
-                console.log(updateSentiment[0].keywords[4].text);
-                var positive = [];
-                var negative = [];
-                var neutral = [];
+                // console.log(updateSentiment);
+                // console.log(updateSentiment.length);
+                // console.log(updateSentiment[0].keywords[4].text);
+                // var positive = [];
+                // var negative = [];
+                // var neutral = [];
                 for (var i = 0; i < updateSentiment.length; i++) {
                     for (var j = 0; j < 50; j++) {
                         if (updateSentiment[i].keywords[j].sentiment.type === "positive") {
-                            positive.push(updateSentiment[i].keywords[j].text);
+                            // positive.push(updateSentiment[i].keywords[j].text);
+                            sentimentsArray[0].push(updateSentiment[i].keywords[j].text)
                         } else if (updateSentiment[i].keywords[j].sentiment.type === "negative") {
-                            negative.push(updateSentiment[i].keywords[j].text);
+                            // negative.push(updateSentiment[i].keywords[j].text);
+                            sentimentsArray[1].push(updateSentiment[i].keywords[j].text)
                         } else if (updateSentiment[i].keywords[j].sentiment.type === "neutral") {
-                            neutral.push(updateSentiment[i].keywords[j].text);
+                            // neutral.push(updateSentiment[i].keywords[j].text);
+                            sentimentsArray[2].push(updateSentiment[i].keywords[j].text)
                         }
                     }
                 }
-                sentimentsArray.push(positive);
-                sentimentsArray.push(negative);
-                sentimentsArray.push(neutral);
+                // sentimentsArray.push(positive);
+                // sentimentsArray.push(negative);
+                // sentimentsArray.push(neutral);
                 store.addSentiment(songId, sentimentsArray);
                 console.log(song);
             });
@@ -178,7 +181,8 @@ SC.initialize({
             }
             // send songObjects to charts view
             console.log(songObjects);
-            bl.barChartData(songObjects);
+            // bl.barChartData(songObjects);
+            bl.chartData(songObjects);
         };
 
         this.sendSong = function(songId) {
@@ -300,6 +304,125 @@ SC.initialize({
             return song;
         };
 
+        this.chartData = function(songs) {
+            var songTitles = [];
+            var playFollowData = [];
+            var playLikeData = [];
+            var followLikeData = [];
+            for (var i = 0; i < songs.length; i++) {
+                songTitles.push(songs[i]['title']);
+                playFollowData.push(songs[i].playback_count / songs[i].followers);
+                playLikeData.push(songs[i].playback_count / songs[i].favoritings_count);
+                followLikeData.push(songs[i].followers / songs[i].favoritings_count);
+            }
+
+            var playsChartData = $.map(songs, function(series) {
+                return {
+                    name: series.title,
+                    data: [
+                        (series.playback_count / series.followers), 
+                        (series.playback_count / series.favoritings_count)
+                    ]
+                };
+            });
+
+            var followsChartData = $.map(songs, function(series) {
+                return {
+                    name: series.title,
+                    data: [
+                        (series.followers / series.comment_count), 
+                        (series.followers / series.favoritings_count)
+                    ]
+                };
+            });
+
+            var commentChartData = $.map(songs, function(series) {
+                return {
+                    name: series.title,
+                    data: [
+                        series.comment_times['15'],series.comment_times['30'],series.comment_times['45'],series.comment_times['60'],
+                        series.comment_times['75'],series.comment_times['90'],series.comment_times['105'],series.comment_times['120'],
+                        series.comment_times['135'],series.comment_times['150'],series.comment_times['165'],series.comment_times['180'],
+                        series.comment_times['195'],series.comment_times['210'],series.comment_times['225'],series.comment_times['240'],
+                        series.comment_times['255'],series.comment_times['270'],series.comment_times['285'],series.comment_times['300']
+                    ]
+                };
+            });
+            
+
+            var plays = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'plays',
+                    type: 'bar'
+                },
+                title: {
+                    text: 'something'
+                },
+                xAxis: {
+                    categories: ['plays/follow', 'plays/likes']
+                },
+                yAxis: {
+                    title: {
+                        text: 'something'
+                    }
+                },
+                series: playsChartData
+            });
+
+            var follows = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'follows',
+                    type: 'bar'
+                },
+                title: {
+                    text: 'something else'
+                },
+                xAxis: {
+                    categories: ['follow/comments', 'follow/likes']
+                },
+                yAxis: {
+                    title: {
+                        text: 'something else'
+                    }
+                },
+                series: followsChartData
+            });
+
+            var comments = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'comments',
+                    type: 'line'
+                },
+                title: {
+                    text: 'stuff'
+                },
+                xAxis: {
+                    categories: [0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300]
+                },
+                yAxis: {
+                    title: {
+                        text: 'stuff'
+                    }
+                },
+                series: commentChartData
+            })
+
+            // $('#line').highcharts({
+            //     chart: { type: 'line' },
+            //     title: { text: 'comments' },
+            //     xAxis: { categories: [0,15,30,45,60] },
+            //     yAxis: { 
+            //         title: {
+            //             text: "comments/time"
+            //         }
+            //     },
+            //     series: [{
+            //         name: "something",
+            //         data: [100,200,250,234]
+            //     }]
+            // });
+        };
+
         this.barChartData = function(songs) {
             // console.log(songs)
             var songTitles = [];
@@ -319,10 +442,14 @@ SC.initialize({
                 datasets: [
                     {
                         label: "My First dataset",
-                        fillColor: "rgba(220,220,220,0.5)",
-                        strokeColor: "rgba(220,220,220,0.8)",
-                        highlightFill: "rgba(220,220,220,0.75)",
-                        highlightStroke: "rgba(220,220,220,1)",
+                        // fillColor: "rgba(220,220,220,0.5)",
+                        fillColor: "blue",
+                        // strokeColor: "rgba(220,220,220,0.8)",
+                        strokeColor: "red",
+                        // highlightFill: "rgba(220,220,220,0.75)",
+                        highlightFill: "green",
+                        // highlightStroke: "rgba(220,220,220,1)",
+                        highlightStroke: "black",
                         data: playFollowData
                     }
                 ]

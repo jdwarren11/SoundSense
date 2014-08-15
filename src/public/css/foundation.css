@@ -1104,7 +1104,8 @@ button, .button {
   padding-bottom: 1.0625rem;
   padding-left: 2rem;
   font-size: 1rem;
-  background-color: #A375FF;
+  /*background-color: #A375FF;*/
+  background-color: #000000;
   border-color: #007095;
   color: #FFFFFF;
   transition: background-color 300ms ease-out; }
@@ -2623,6 +2624,8 @@ a {
   line-height: inherit; }
   a:hover, a:focus {
     color: #A375FF; 
+    /*color:000000FF; */
+    color: #000000; 
     text-decoration: none;
     background-color:white;
     }

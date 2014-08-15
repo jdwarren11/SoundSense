@@ -29,7 +29,14 @@
         bl.analyzeSongs(songIds);
         $(".searchformbox").hide();
         $(".analyze-form-box").hide();
-        $("#my-slideshow").show();
+        $('body').css('background', 'black');
+        // $("#my-slideshow").show();
+        // $('#my-slideshow').bjqs({
+        //     'height' : 400,
+        //     'width' : 800,
+        //     'responsive' : true
+        // });
+        $("#charts").show();
     });
 
     // $('.comments').on('click', function(e) {
