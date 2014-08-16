@@ -60,12 +60,11 @@ h3{
 
 .searchformbox {
   position: relative;
-  // top: -650px;
   background-color: rgba(255,255,255,0.9);
   opacity: inherit;
   display: inline-block;
   padding: 20px;
-  // width: 700px;
+  width: 700px;
 }
 
 #overimage {
@@ -77,26 +76,12 @@ h3{
 
 .analyze-form {
   position: relative;
-  // top: -760px;
   background-color: rgba(255,255,255,0.9);
   opacity: inherit;
   display: inline-block;
   padding: .5cm;
   width: 700px
 }
-// .analyze-list {
-//   width: 100px;
-// }
-
-// .select-song {
-//   position: relative;
-//   // top: -500px;
-//   background-color: rgba(255,255,255,0.6);
-//   opacity: inherit;
-//   display: inline-block;
-//   padding: .5cm;
-//   float: right
-// }
 
 .button {
   font-family: 'Roboto Condensed', sans-serif;
@@ -128,13 +113,6 @@ h3{
     font-family: 'Roboto Condensed', sans-serif;
 }
 
-// #SearchModal {
-//   background-color: rgba(255,255,255,0.6);
-//   opacity: inherit;
-//   float: right;
-//   height: 40em;
-//   width: 40em
-// }
 
 .nav {
   height: 100px;
@@ -167,10 +145,6 @@ h3{
   background-color: none
 }
 
-// .body {
-//   height: 550px;
-
-// }
 
 ul {
   list-style-type: none;

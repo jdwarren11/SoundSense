@@ -45,13 +45,13 @@ SC.initialize({
         this.getCommentsBySong = function(songId) {
             var songCount = this.getSongById(songId).comment_count;
             var pageSize = 200;
-            var pageCount = Math.floor(songCount / pageSize);
+            var pageCount = Math.ceil(songCount / pageSize);
             var commentPromises = [];
             var allComments = [];
             var commentTimes = [];
-            for (var i = 0; i < pageCount; i += 1) {
+            for (var i = 0; i < pageCount; i++) {
                 var promise = new Promise(function(resolve, reject) {
-                    SC.get('/tracks/'+songId+'/comments', { limit: pageSize, offset: pageSize * i }, function(comments) {
+                    SC.get('/tracks/'+songId+'/comments', { offset: pageSize * i }, function(comments) {
                         resolve(comments);
                     });
                     // console.log("Delivering promise");
@@ -69,6 +69,8 @@ SC.initialize({
                         commentTimes.push(commentsArray[i][j].timestamp)
                     }
                 }
+                // console.log(allComments);
+                console.log(commentTimes);
                 songCache[songId]['comment_array'] = bl.filter(allComments);
                 // console.log(allComments);
                 songCache[songId]['comment_times'] = bl.timeStamp(commentTimes);
@@ -184,7 +186,8 @@ SC.initialize({
             var filter = com.join(" ");
             var filter2 = filter.replace(/[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
             var filter3 = filter2.replace(/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?/ig, '');
-            var stringLength = Math.floor(filter3.length / 5000);
+            // console.log(filter3.length);
+            var stringLength = Math.ceil(filter3.length / 5000);
             var commentArray = []
 
             for (var i = 0; i < stringLength; i++) {
@@ -194,6 +197,7 @@ SC.initialize({
         };
 
         this.timeStamp = function(comments) {
+            var maxTime = Math.max.apply(null, comments);
             var commentTimes = {
                 15: 0,
                 30: 0,
