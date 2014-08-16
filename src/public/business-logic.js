@@ -70,7 +70,7 @@ SC.initialize({
                     }
                 }
                 // console.log(allComments);
-                console.log(commentTimes);
+                // console.log(commentTimes);
                 songCache[songId]['comment_array'] = bl.filter(allComments);
                 // console.log(allComments);
                 songCache[songId]['comment_times'] = bl.timeStamp(commentTimes);
@@ -91,17 +91,23 @@ SC.initialize({
 
         this.searchForSongs = function(songTitle) {
             // console.log('Searching', songTitle);
-            var songOptionsHTML = "";
+            // var songOptionsHTML = "";
+            var headerHTML = '<tr id="search-header"><th>Add</th><th>Track Name</th><th>User Accout</th></tr>';
+            var searchHTML = "";
             store.getSongsByTitle(songTitle, function(tracks) {
                 // console.log('Found', tracks)
                 for (var i in tracks) {
-                    songOptionsHTML += '<input type="radio" name="song" value="'+tracks[i].id+'">' + tracks[i].title + '<br />';
+                    // songOptionsHTML += '<input type="radio" name="song" value="'+tracks[i].id+'">' + tracks[i].title + '<br />';
+                    searchHTML +='<tr><td><button class="button small addition" value="'+tracks[i].id+'">+</button></td><td>'+tracks[i].title+'</td><td>'+tracks[i].username+'</td></tr>';
                 }
            
-                $('.options').html(songOptionsHTML);
-                $('.select-song').show();
-
+                // $('.options').html(songOptionsHTML);
+                $('.search-results').html(headerHTML + searchHTML);
+                $('.song-select').show()
+                // $('.select-song').show();
             });
+
+
         };
 
         this.addSong = function(songId) {

@@ -20,6 +20,9 @@
       <p>Fourth panel content goes here...</p>
     </div>
   </div> -->
+  <div id="sounds">
+
+  </div>
 
   <div id="plays" style="width:1000px; height:500px;"></div>
   <br />
@@ -44,12 +47,18 @@
   </div>
   <div class="select-song-div">
 
-    <form class="select-song" style="display:none">
+<!--     <form class="select-song" style="display:none">
       <hr />
       <h2><strong>Search Results</strong></h2>
       <div class="options"></div>
         <button class="button">ADD</button>
     </form>
+    <br /> -->
+    <div class="song-select" style="display:none">
+      <hr />
+      <!-- <h2><strong>Search Results</strong><h2> -->
+      <table class="search-results"></table>
+    </div>
 
   </div>
 
@@ -61,11 +70,14 @@
 
 <div class="analyze-form-box">
     <!-- <div class="small-6 large-centered columns"> -->
+  <p class="song-form-header">Songs To Analyze</p>
+    <div class="large-5 columns">
       <form class="analyze-form">
-        <p class="song-form-header">Songs To Analyze</p>
-        <ul class="analyze-list"></ul>
-        <br>
-        <button class="button">ANALYZE</button>
+        <ol class="analyze-list"></ol>
+        <!-- <br> -->
+    </div>
+    <div class="large-2 columns"> </div>
+        <button class="button">ANALYZE -></button>
       </form>
     <!-- </div> -->
 </div>
