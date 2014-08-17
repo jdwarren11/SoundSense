@@ -98,7 +98,7 @@ SC.initialize({
                 // console.log('Found', tracks)
                 for (var i in tracks) {
                     // songOptionsHTML += '<input type="radio" name="song" value="'+tracks[i].id+'">' + tracks[i].title + '<br />';
-                    searchHTML +='<tr><td><button class="button small addition" value="'+tracks[i].id+'">+</button></td><td>'+tracks[i].title+'</td><td>'+tracks[i].username+'</td></tr>';
+                    searchHTML +='<tr><td><button class="button tiny addition" value="'+tracks[i].id+'">+</button></td><td>'+tracks[i].title+'</td><td>'+tracks[i].username+'</td></tr>';
                 }
            
                 // $('.options').html(songOptionsHTML);
@@ -160,11 +160,14 @@ SC.initialize({
                 for (var i = 0; i < updateSentiment.length; i++) {
                     for (var j = 0; j < 50; j++) {
                         if (updateSentiment[i].keywords[j].sentiment.type === "positive") {
-                            sentimentsArray[0].push(updateSentiment[i].keywords[j].text)
+                            // sentimentsArray[0].push(updateSentiment[i].keywords[j].text)
+                            sentimentsArray[0].push(updateSentiment[i].keywords[j])
                         } else if (updateSentiment[i].keywords[j].sentiment.type === "negative") {
-                            sentimentsArray[1].push(updateSentiment[i].keywords[j].text)
+                            // sentimentsArray[1].push(updateSentiment[i].keywords[j].text)
+                            sentimentsArray[1].push(updateSentiment[i].keywords[j])
                         } else if (updateSentiment[i].keywords[j].sentiment.type === "neutral") {
-                            sentimentsArray[2].push(updateSentiment[i].keywords[j].text)
+                            // sentimentsArray[2].push(updateSentiment[i].keywords[j].text)
+                            sentimentsArray[2].push(updateSentiment[i].keywords[j])
                         }
                     }
                 }
@@ -177,10 +180,13 @@ SC.initialize({
             var songObjects = [];
             for (var i = 0; i < songIds.length; i++) {
                 songObjects.push(store.getSongById(songIds[i]));
+
             }
             // send songObjects to charts view
             console.log(songObjects);
             // bl.barChartData(songObjects);
+            // SC.oEmbed(songObjects[0].permalink_url, document.getElementById('player'));
+            // SC.oEmbed(songObjects[1].permalink_url, document.getElementById('player2'));
             bl.chartData(songObjects);
         };
 
@@ -307,9 +313,6 @@ SC.initialize({
 
         this.chartData = function(songs) {
             var songTitles = [];
-            // var playFollowData = [];
-            // var playLikeData = [];
-            // var followLikeData = [];
             var positive = [];
             var negative = [];
             var neutral = [];
@@ -319,9 +322,6 @@ SC.initialize({
                 positive.push(songs[i].sentiment[0].length)
                 negative.push(songs[i].sentiment[1].length)
                 neutral.push(songs[i].sentiment[2].length)
-                // playFollowData.push(songs[i].playback_count / songs[i].followers);
-                // playLikeData.push(songs[i].playback_count / songs[i].favoritings_count);
-                // followLikeData.push(songs[i].followers / songs[i].favoritings_count);
             }
 
             var playsChartData = $.map(songs, function(series) {
@@ -402,14 +402,17 @@ SC.initialize({
                     type: 'line'
                 },
                 title: {
-                    text: 'stuff'
+                    text: 'Comments Count'
                 },
                 xAxis: {
+                    title: {
+                        text: 'Seconds'
+                    },
                     categories: [0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300]
                 },
                 yAxis: {
                     title: {
-                        text: 'stuff'
+                        text: '# Comments'
                     }
                 },
                 series: commentChartData
@@ -421,27 +424,80 @@ SC.initialize({
                     type: 'bar'
                 },
                 title: {
-                    text: 'something else'
+                    text: 'Sentiment Analysis'
                 },
                 xAxis: {
                     categories: songTitles
                 },
                 yAxis: {
                     title: {
-                        text: 'something else'
+                        text: '# Keywords'
                     }
                 },
-                series: [{
+                series: [
+                {
+                    name: 'neutral',
+                    data: neutral
+                }, {
                     name: 'positive',
                     data: positive
                 }, {
                     name: 'negative',
                     data: negative
-                }, {
-                    name: 'neutral',
-                    data: neutral
-                }]
+                }
+                ]
             });
+
+            for (var i = 0; i < songs.length; i++) {
+
+                $('#charts').append('<div id="scatter'+i+'" style="width:1000px; height:500px;"></div><br />');
+
+                var posData = $.map(songs[i].sentiment[0], function(series) {
+                    return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
+                });
+                var negData = $.map(songs[i].sentiment[1], function(series) {
+                    return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
+                });
+                var neutData = $.map(songs[i].sentiment[2], function(series) {
+                    return [[parseFloat(series.relevance), 0]];
+                });
+
+                new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'scatter'+i,
+                        type: 'scatter'
+                    },
+                    title: {
+                        text: songs[i].title
+                    },
+                    xAxis: {
+                        title: {
+                            enabled: true,
+                            text: 'Keyword Relevance'
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Sentiment Score'
+                        }
+                    },
+                    series: [
+                    {
+                        name: 'neutral',
+                        data: neutData
+                        // data: [[0.7777777, 0.63], [0.411, 0.8]]
+                    }, {
+                        name: 'positive',
+                        data: posData
+                        // data: [[0.1, -0.2], [0.15, -0.63]]
+                    }, {
+                        name: 'negative',
+                        data: negData
+                        // data: [[0.22, 0.43], [0.11, 0.55]]
+                    }]
+                });
+            }
+
         };
     };
 

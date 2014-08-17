@@ -15,6 +15,7 @@
         var selection = $('input[name=song]:checked').val();
         bl.addSong(selection);
         $selectForm.hide();
+        // $('.analyze-form-box').show();
         $('#input').val('');
     });
 
@@ -29,6 +30,7 @@
         $(".analyze-form-box").hide();
         $('body').css('background', 'black');
         $("#charts").show();
+
     });
 
     $(document).on('click', '.addition', function(e) {
@@ -39,6 +41,8 @@
         $(".song-select").hide();
         $("#input").val('');
     });
+
+
 
 
 

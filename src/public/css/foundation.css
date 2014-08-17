@@ -4527,7 +4527,7 @@ table {
 
 /* Standard Forms */
 form {
-  margin: 0 0 1rem; }
+  margin: 0 0 -1rem; }
 
 /* Using forms within rows, we need to set some defaults */
 form .row .row {
