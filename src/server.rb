@@ -24,7 +24,7 @@ post '/proxy' do
   #api_params = {:apikey=>"10964186d4b805e210bb0ae5208c03f319159853", :text=>"test", :outputMode=>"json"}
 
   # puts "Params: #{params[:api_params]}"
-  # puts "URL: #{params[:url]}"
+  puts "URL: #{params[:url]}"
 
   uri = URI.parse(params[:url])
   # puts "Parsed URL: #{uri}"

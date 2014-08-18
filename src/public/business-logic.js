@@ -187,6 +187,7 @@ SC.initialize({
             // bl.barChartData(songObjects);
             // SC.oEmbed(songObjects[0].permalink_url, document.getElementById('player'));
             // SC.oEmbed(songObjects[1].permalink_url, document.getElementById('player2'));
+            bl.embedSong(songObjects);
             bl.chartData(songObjects);
         };
 
@@ -196,15 +197,24 @@ SC.initialize({
 
         this.filter = function(com) {
             var filter = com.join(" ");
+            // reg ex to take out non ascii characters
             var filter2 = filter.replace(/[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
+            // reg ex to take out links and url's
             var filter3 = filter2.replace(/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?/ig, '');
-            // console.log(filter3.length);
-            var stringLength = Math.ceil(filter3.length / 5000);
+            // reg ex to take out punctuation
+            // var filter4 = filter3.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,'');
+
+            // reg ex to replace if same char multiple times
+            var filter5 = filter3.replace(/(.)\1{2,}/g, '$1$1');
+            // reg ex to replace multiple spaces
+            var filter6 = filter5.replace(/\s{2,}/g," ");
+            var stringLength = Math.ceil(filter6.length / 5000);
             var commentArray = []
 
             for (var i = 0; i < stringLength; i++) {
-                commentArray.push(filter3.slice(i * 5000, (i + 1) * 5000));
+                commentArray.push(filter6.slice(i * 5000, (i + 1) * 5000));
             }
+            // console.log(commentArray);
             return commentArray;
         };
 
@@ -303,12 +313,11 @@ SC.initialize({
             return commentTimes;
         };
 
-        this.embedSong = function(track_url) {
-            // track_url = song
-            song = SC.oEmbed(track_url, function(oEmbed) {
-                console.log('response:' + oEmbed);
-            });
-            return song;
+        this.embedSong = function(songs) {
+            for (var i = 0; i < songs.length; i++) {
+                $('#play-songs').append('<div id="player'+i+'" style="width:350px; height:100px;"></div><br />');
+                SC.oEmbed(songs[i].permalink_url, document.getElementById('player'+i));
+            }
         };
 
         this.chartData = function(songs) {
@@ -324,23 +333,28 @@ SC.initialize({
                 neutral.push(songs[i].sentiment[2].length)
             }
 
-            var playsChartData = $.map(songs, function(series) {
+            var playFollowData = $.map(songs, function(series) {
                 return {
                     name: series.title,
-                    data: [
-                        (series.playback_count / series.followers), 
-                        (series.playback_count / series.favoritings_count)
-                    ]
+                    data: [series.playback_count / series.followers]
+                    // [
+                        // (series.playback_count / series.favoritings_count)
+                    // ]
                 };
             });
 
-            var followsChartData = $.map(songs, function(series) {
+            var likeCommentData = $.map(songs, function(series) {
                 return {
                     name: series.title,
-                    data: [
-                        (series.followers / series.comment_count), 
-                        (series.followers / series.favoritings_count)
-                    ]
+                    data: [series.favoritings_count / series.comment_count]
+                        // (series.followers / series.favoritings_count)
+                };
+            });
+
+            var followLikeComData = $.map(songs, function(series) {
+                return {
+                    name: series.title,
+                    data: [series.followers / (series.favoritings_count + series.comment_count)]
                 };
             });
 
@@ -358,42 +372,100 @@ SC.initialize({
             });
 
 
-            var plays = new Highcharts.Chart({
+            var playFollow = new Highcharts.Chart({
                 chart: {
-                    renderTo: 'plays',
+                    renderTo: 'play-follow',
                     type: 'bar'
                 },
                 title: {
-                    text: 'something'
+                    text: 'Plays vs. Followers'
                 },
                 xAxis: {
-                    categories: ['plays/follow', 'plays/likes']
+                    categories: ['songs']
+                    // title: {
+                    //     text: 'song titles'
+                    // }
                 },
                 yAxis: {
                     title: {
-                        text: 'something'
+                        text: 'plays/follower ratio'
                     }
                 },
-                series: playsChartData
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -10,
+                    y: 50,
+                    floating: true,
+                    borderWidth: 1, 
+                    shadow: true
+                },
+                series: playFollowData
             });
 
-            var follows = new Highcharts.Chart({
+            var likeCom = new Highcharts.Chart({
                 chart: {
-                    renderTo: 'follows',
+                    renderTo: 'like-comment',
                     type: 'bar'
                 },
                 title: {
-                    text: 'something else'
+                    text: 'Likes vs. Comments'
                 },
                 xAxis: {
-                    categories: ['follow/comments', 'follow/likes']
+                    categories: ['songs']
+                    // title: {
+                    //     text: 'song titles'
+                    // }
                 },
                 yAxis: {
                     title: {
-                        text: 'something else'
+                        text: 'like/comment ratio'
                     }
                 },
-                series: followsChartData
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -10,
+                    y: 50,
+                    floating: true,
+                    borderWidth: 1, 
+                    shadow: true
+                },
+                series: likeCommentData
+            });
+
+            var followLikeCom = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'follow-like-com',
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Followers vs Likes & Comments'
+                },
+                xAxis: {
+                    categories: ['songs']
+                    // title: {
+                    //     text: 'something'
+                    // }
+                },
+                yAxis: {
+                    title: {
+                        text: 'followers/(likes+comments) ratio'
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -10,
+                    y: 50,
+                    floating: true,
+                    borderWidth: 1, 
+                    shadow: true
+                },
+                series: followLikeComData
             });
 
             var comments = new Highcharts.Chart({
@@ -450,7 +522,7 @@ SC.initialize({
 
             for (var i = 0; i < songs.length; i++) {
 
-                $('#charts').append('<div id="scatter'+i+'" style="width:1000px; height:500px;"></div><br />');
+                $('#sentiment-scatter').append('<div id="scatter'+i+'" style="width:1000px; height:500px;"></div><br />');
 
                 var posData = $.map(songs[i].sentiment[0], function(series) {
                     return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
