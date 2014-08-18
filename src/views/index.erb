@@ -2,34 +2,42 @@
 <div id="charts" style="display:none">
   <br />
   <ul class="tabs" data-tab>
-    <li class="tab-title active"><a href="#panel2-1">Play Songs</a></li>
-    <li class="tab-title"><a href="#panel2-2">Play/Follow</a></li>
-    <li class="tab-title"><a href="#panel2-3">Like/Comment</a></li>
-    <li class="tab-title"><a href="#panel2-4">Follow/Like+Comment</a></li>
-    <li class="tab-title"><a href="#panel2-5">Comments/Time</a></li>
-    <li class="tab-title"><a href="#panel2-6">Sentiment 1</a></li>
-    <li class="tab-title"><a href="#panel2-7">Sentiment 2</a></li>
+    <li class="tab-title active"><a href="#panel2-1">Play Songs</a>
+    </li><li class="tab-title"><a href="#panel2-2">Graph 1</a>
+    </li><li class="tab-title"><a href="#panel2-3">Graph 2</a>
+    </li><li class="tab-title"><a href="#panel2-4">Graph 3</a>
+    </li><li class="tab-title"><a href="#panel2-5">Graph 4</a>
+    </li><li class="tab-title"><a href="#panel2-6">Graph 5</a>
+    </li><li class="tab-title"><a href="#panel2-7">Sentiment Analysis</a></li>
   </ul>
   <div class="tabs-content">
     <div class="content active" id="panel2-1">
+      <!-- <div id="play-songs" class="js-masonry" data-masonry-options='{ "columnWidth": 500, "itemSelector": ".song" }'></div> -->
+      <br />
       <div id="play-songs"></div>
     </div>
     <div class="content" id="panel2-2">
-      <div id="play-follow" style="width:1000px; height:500px;"></div>
+      <p>This graph shows the ratio of how many times a song has been played versus how many followers the user/artist who posted the song has.</p>
+      <div id="play-follow" style="width:1000px; height:550px;"></div>
     </div>
     <div class="content" id="panel2-3">
-      <div id="like-comment" style="width:1000px; height:500px;"></div>
+      <p>This graph shows the ratio of likes to comments. It is a good metric to determine engagement. For example, a high ratio could mean that people both liked and commented on a song, or that people didn't like the song, but commented (negatively) on it. The sentiment analysis of the song is meant to help determine which of these is true.</p>
+      <div id="like-comment" style="width:1000px; height:550px;"></div>
     </div>
     <div class="content" id="panel2-4">
-      <div id="follow-like-com" style="width:1000px; height:500px;"></div>
+      <p>This graph shows how many people engaged with the song by either liking or commenting on it relative to the number of followers the user/artist has.</p>
+      <div id="follow-like-com" style="width:1000px; height:550px;"></div>
     </div>
     <div class="content" id="panel2-5">
-      <div id="comments" style="width:1000px; height:500px;"></div>
+      <p>This graph shows the number of comments posted over the length of the song. Most people post comments at the beginning or end of a song, however, with this metric, you can also determine "good" or "bad" parts of the song if there is a spike in the number.</p>
+      <div id="comments" style="width:1000px; height:550px;"></div>
     </div>
     <div class="content" id="panel2-6">
-      <div id="sentiment" style="width:1000px; height:500px;"></div> 
+      <p>This graph shows the total number of positive, negative, and neutral comments for each song.</p>
+      <div id="sentiment" style="width:1000px; height:550px;"></div> 
     </div>
     <div class="content" id="panel2-7">
+      <p>These graphs show the keywords extracted from the sentiment analysis, their relevance, and their sentiment score. If you hover over something you can see a list of comments. It should be noted that depending on the genre, the sentiment is not always completely accurate. For example, a hip-hop or club song tends to have more profanity in the comments which is interpereted as negative sentiment, but really should be positive.</p>
       <div id="sentiment-scatter"></div>
     </div>
   </div>
@@ -100,22 +108,5 @@
     <!-- </div> -->
 </div>
 
-
-<!-- <div id="my-slideshow" style="display:none">
-  <ul class="bjqs">
-    <li>
-      <canvas id="play-follow" width="350" height="200"></canvas>
-    </li>
-    <li>
-      <canvas id="play-like" width="350" height="200"></canvas>
-    </li>
-    <li>
-      <canvas id="follow-like" width="350" height="200"></canvas>
-    </li>
-    <li>
-      <canvas id="comments" width="1000" height="400"></canvas>
-    </li>
-  </ul>
-</div> -->
 
     

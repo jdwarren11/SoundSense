@@ -141,7 +141,7 @@ SC.initialize({
                                     // console.log("success data: ", data);
                                 } else if (data["status"] === "ERROR") {
                                     reject(data);
-                                    console.log("error data: ",data);
+                                    console.log("error data: ", data);
                                 }
                             }, 
                             error: function(jqxhr) {
@@ -184,9 +184,6 @@ SC.initialize({
             }
             // send songObjects to charts view
             console.log(songObjects);
-            // bl.barChartData(songObjects);
-            // SC.oEmbed(songObjects[0].permalink_url, document.getElementById('player'));
-            // SC.oEmbed(songObjects[1].permalink_url, document.getElementById('player2'));
             bl.embedSong(songObjects);
             bl.chartData(songObjects);
         };
@@ -315,8 +312,10 @@ SC.initialize({
 
         this.embedSong = function(songs) {
             for (var i = 0; i < songs.length; i++) {
-                $('#play-songs').append('<div id="player'+i+'" style="width:350px; height:100px;"></div><br />');
-                SC.oEmbed(songs[i].permalink_url, document.getElementById('player'+i));
+                // $('#play-songs').append('<br /><div id="song'+i+'" style="width:350px; height:100px;"></div><br />');
+                $('#play-songs').append('<div id="song'+i+'"></div>');
+                SC.oEmbed(songs[i].permalink_url, document.getElementById('song'+i));
+
             }
         };
 
@@ -522,7 +521,7 @@ SC.initialize({
 
             for (var i = 0; i < songs.length; i++) {
 
-                $('#sentiment-scatter').append('<div id="scatter'+i+'" style="width:1000px; height:500px;"></div><br />');
+                $('#sentiment-scatter').append('<div id="scatter'+i+'" style="width:1000px; height:550px;"></div><br />');
 
                 var posData = $.map(songs[i].sentiment[0], function(series) {
                     return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
@@ -540,7 +539,7 @@ SC.initialize({
                         type: 'scatter'
                     },
                     title: {
-                        text: songs[i].title
+                        text: 'Song Title: ' + songs[i].title
                     },
                     xAxis: {
                         title: {
