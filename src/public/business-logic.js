@@ -117,48 +117,23 @@ SC.initialize({
             var sentimentsArray = [[],[],[]];
             store.getArtistInfo(songId, song.user_id); 
             $('.analyze-list').append('<li data-id="'+song.id+'">'+song.title+"</li>");
+            
             store.getCommentsBySong(songId).then(function(comments) {
                 // console.log('Got', comments.length, 'comments');
                 for (var i = 0; i < comments.length; i++) {
-                    var promise = new Promise(function(resolve, reject) {
-                        $.ajax({
-                            url: '/proxy',
-                            dataType: 'json',
-                            // jsonp: 'jsonp',
-                            type: 'post',
-                            contentType: 'application/javascript',
-                            data: JSON.stringify({
-                                apikey: g.alchemy_id,
-                                // text: "test",
-                                text: song.comment_array[i],
-                                outputMode: 'json',
-                                url: 'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords',
-                                sentiment: 1
-                            }),
-                            success: function(data) {
-                                data = JSON.parse(data);
-                                if (data["status"] === "OK") {
-                                    resolve(data);
-                                    // console.log("success data: ", data);
-                                } else if (data["status"] === "ERROR") {
-                                    reject(data);
-                                    console.log("error data: ", data);
-                                }
-                            }, 
-                            error: function(jqxhr) {
-                                reject(jqxhr);
-                                console.log("error data2: ", jqxhr);
-                            }
-                        });
-                    });
+                    var promise = bl.retrieveComments(song, comments, i);
                     sentimentPromises.push(promise);
                 }
+                console.log("Running", sentimentPromises.length)
                 return Promise.all(sentimentPromises);
             }).then(function(updateSentiment) {
-                // console.log(updateSentiment);
+                console.log("Sentiment results:", updateSentiment);
                 // console.log(updateSentiment.length);
                 // console.log(updateSentiment[0].keywords[4].text);
                 for (var i = 0; i < updateSentiment.length; i++) {
+                    if (!updateSentiment[i]) {
+                        continue;
+                    }
                     for (var j = 0; j < 50; j++) {
                         if (updateSentiment[i].keywords[j].sentiment.type === "positive") {
                             // sentimentsArray[0].push(updateSentiment[i].keywords[j].text)
@@ -174,6 +149,46 @@ SC.initialize({
                 }
                 store.addSentiment(songId, sentimentsArray);
                 console.log(song);
+                // console.log(JSON.stringify(song));
+            });
+        };
+
+        this.retrieveComments = function (song, comments, index) {
+            console.log("Building promise", index);
+            return new Promise(function(resolve, reject) {
+                $.ajax({
+                    url: '/proxy',
+                    dataType: 'json',
+                    // jsonp: 'jsonp',
+                    type: 'post',
+                    contentType: 'application/javascript',
+                    data: JSON.stringify({
+                        apikey: g.alchemy_id,
+                        // text: "test",
+                        text: song.comment_array[index],
+                        outputMode: 'json',
+                        url: 'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords',
+                        sentiment: 1
+                    }),
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data["status"] === "OK") {
+                            resolve(data);
+                            // console.log("success data: ", data);
+                            console.log("success for: ", index);
+                        } else if (data["status"] === "ERROR" && data["statusInfo"] == "unsupported-text-language") {
+                            console.log("Blank for: ", index);
+                            resolve(null);
+                        } else if (data["status"] === "ERROR") {
+                            reject(data);
+                            console.log("error data: ", index, data);
+                        }
+                    }, 
+                    error: function(jqxhr) {
+                        console.log("Error for: ", index, jqxhr);
+                        reject(jqxhr);
+                    }
+                });
             });
         };
 
@@ -225,6 +240,9 @@ SC.initialize({
                 commentArray.push(filter6.slice(i * 5000, (i + 1) * 5000));
             }
             // console.log(commentArray);
+            if (commentArray.length > 10) {
+
+            } 
             return commentArray;
         };
 
