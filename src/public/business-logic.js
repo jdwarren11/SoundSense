@@ -186,10 +186,24 @@ SC.initialize({
             console.log(songObjects);
             bl.embedSong(songObjects);
             bl.chartData(songObjects);
+            bl.commentButtons(songObjects);
         };
 
         this.sendSong = function(songId) {
             store.getCommentsBySong(songId);
+        };
+
+        this.getComments = function(songId) {
+            var song = store.getSongById(songId);
+            return song.sentiment;
+        };
+
+        this.commentButtons = function(songObjs) {
+            for (var i = 0; i < songObjs.length; i++) {
+                $('.all-comments .n'+i).append('<button class="pos-button" class="button tiny" value="'+songObjs[i].id+'">positive</button>');
+                $('.all-comments .n'+i).append('<button class="neg-button" class="button tiny" value="'+songObjs[i].id+'">negative</button>');
+                $('.all-comments .n'+i).append('<button class="neut-button" class="button tiny" value="'+songObjs[i].id+'">neutral</button>');
+            }
         };
 
         this.filter = function(com) {
@@ -198,8 +212,6 @@ SC.initialize({
             var filter2 = filter.replace(/[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
             // reg ex to take out links and url's
             var filter3 = filter2.replace(/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)?/ig, '');
-            // reg ex to take out punctuation
-            // var filter4 = filter3.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,'');
 
             // reg ex to replace if same char multiple times
             var filter5 = filter3.replace(/(.)\1{2,}/g, '$1$1');
@@ -521,7 +533,14 @@ SC.initialize({
 
             for (var i = 0; i < songs.length; i++) {
 
-                $('#sentiment-scatter').append('<div id="scatter'+i+'" style="width:1000px; height:550px;"></div><br />');
+                $('#sentiment-scatter').append('<div id="scatter'+i+'" style="width:720px; height:550px;"></div><br />');
+                $('#comments-div').append('<div class="all-comments n'+i+'"> \
+                    <button class="button tiny pos-button" value="'+songs[i].id+'">:))</button> \
+                    <button class="button tiny neut-button" value="'+songs[i].id+'">:||</button> \
+                    <button class="button tiny neg-button" value="'+songs[i].id+'">:((</button> \
+                    <div class="scroll"><div class="show-comments"><ul class="positive-list" style="display:none"></ul> \
+                    <ul class="negative-list" style="display:none"></ul><ul class="neutral-list" style="display:none"></ul> \
+                    </div></div></div><br />');
 
                 var posData = $.map(songs[i].sentiment[0], function(series) {
                     return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];

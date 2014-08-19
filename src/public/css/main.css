@@ -25,15 +25,42 @@ iframe {
 }
 
 #charts ul {
-  text-align: center;
+  text-align: inherit;
 }
 
 .tabs .tab-title {
   float: none;
   display: inline-block;
-
 }
 
+.button.tiny.pos-button {
+  background: #90ee7e;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.button.tiny.neg-button {
+  background: #f45b5b;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.button.tiny.neut-button {
+  background: #2b908f;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.all-comments {
+  height: 550px;
+  background-color: #f0f0f0;
+  text-align: left;
+  font-size: 11px
+}
+
+.all-comments {
+  overflow-y: auto;
+}
 /*#play-songs {
   text-align: left;
 }*/
@@ -170,16 +197,6 @@ h3{
 .footer-list:hover {
   background-color: none
 }
-
-#raw#data#songs {
-  background: blue;
-}
-
-/*ul {
-  list-style-type: none;
-   margin: 0;
-  padding: 0;
-}*/
 
 .footer {
   height: 50px;
