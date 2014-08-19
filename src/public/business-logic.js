@@ -116,45 +116,49 @@ SC.initialize({
             var sentimentPromises = [];
             var sentimentsArray = [[],[],[]];
             store.getArtistInfo(songId, song.user_id); 
-            $('.analyze-list').append('<li data-id="'+song.id+'">'+song.title+"</li>");
-            
+
+            $('#adding-song-text').show();
             store.getCommentsBySong(songId).then(function(comments) {
                 // console.log('Got', comments.length, 'comments');
                 for (var i = 0; i < comments.length; i++) {
                     var promise = bl.retrieveComments(song, comments, i);
                     sentimentPromises.push(promise);
                 }
-                console.log("Running", sentimentPromises.length)
+                // console.log("Running", sentimentPromises.length)
                 return Promise.all(sentimentPromises);
             }).then(function(updateSentiment) {
                 console.log("Sentiment results:", updateSentiment);
                 // console.log(updateSentiment.length);
                 // console.log(updateSentiment[0].keywords[4].text);
+                // debugger
                 for (var i = 0; i < updateSentiment.length; i++) {
                     if (!updateSentiment[i]) {
                         continue;
-                    }
-                    for (var j = 0; j < 50; j++) {
+                    } 
+                    for (var j = 0; j < updateSentiment[i].keywords.length; j++) {
                         if (updateSentiment[i].keywords[j].sentiment.type === "positive") {
                             // sentimentsArray[0].push(updateSentiment[i].keywords[j].text)
-                            sentimentsArray[0].push(updateSentiment[i].keywords[j])
+                            sentimentsArray[0].push(updateSentiment[i].keywords[j]);
                         } else if (updateSentiment[i].keywords[j].sentiment.type === "negative") {
                             // sentimentsArray[1].push(updateSentiment[i].keywords[j].text)
-                            sentimentsArray[1].push(updateSentiment[i].keywords[j])
+                            sentimentsArray[1].push(updateSentiment[i].keywords[j]);
                         } else if (updateSentiment[i].keywords[j].sentiment.type === "neutral") {
                             // sentimentsArray[2].push(updateSentiment[i].keywords[j].text)
-                            sentimentsArray[2].push(updateSentiment[i].keywords[j])
-                        }
+                            sentimentsArray[2].push(updateSentiment[i].keywords[j]);
+                        } 
                     }
                 }
+                // debugger
                 store.addSentiment(songId, sentimentsArray);
                 console.log(song);
+                $('.analyze-list').append('<li data-id="'+song.id+'">'+song.title+"</li>");
+                $('#adding-song-text').hide();
                 // console.log(JSON.stringify(song));
             });
         };
 
         this.retrieveComments = function (song, comments, index) {
-            console.log("Building promise", index);
+            // console.log("Building promise", index);
             return new Promise(function(resolve, reject) {
                 $.ajax({
                     url: '/proxy',
@@ -175,18 +179,21 @@ SC.initialize({
                         if (data["status"] === "OK") {
                             resolve(data);
                             // console.log("success data: ", data);
-                            console.log("success for: ", index);
-                        } else if (data["status"] === "ERROR" && data["statusInfo"] == "unsupported-text-language") {
-                            console.log("Blank for: ", index);
-                            resolve(null);
+                            // console.log("success for: ", index);
+                        // } else if (data["status"] === "ERROR" && data["statusInfo"] == "unsupported-text-language") {
+                        //     console.log("Blank for: ", index);
+                        //     resolve(null);
                         } else if (data["status"] === "ERROR") {
-                            reject(data);
+                            resolve(null);
+                            // reject(data);
+                            alert("error adding the song");
                             console.log("error data: ", index, data);
                         }
                     }, 
                     error: function(jqxhr) {
-                        console.log("Error for: ", index, jqxhr);
                         reject(jqxhr);
+                        alert("error adding the song");
+                        console.log("Error for: ", index, jqxhr);
                     }
                 });
             });
