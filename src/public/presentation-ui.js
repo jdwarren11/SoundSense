@@ -35,66 +35,22 @@
 
     $(document).on('click', '.addition', function(e) {
         e.preventDefault();
-        var selection = $(".addition").val();
-        console.log(selection);
+        var selection = $(this).val();
+        // console.log(selection);
         bl.addSong(selection);
         $selectForm.hide();
         $(".song-select").hide();
         $("#input").val('');
     });
 
-    $(document).on('click', '.pos-button', function(e) {
-        e.preventDefault();
-        var songId = $(".pos-button").val();
-        var comments = bl.getComments(songId);
-        if ($('.pos-button').parent().find('li').length > 0) {
-            $('.positive-list').show();
-            $('.negative-list').hide();
-            $('.neutral-list').hide();
-        } else {
-            for (var i = 0; i < comments[0].length; i++) {
-                $('.positive-list').show();
-                $('.negative-list').hide();
-                $('.neutral-list').hide();
-                $(".positive-list").append('<li>'+comments[0][i].text+'</li>');
-            }
-        }
-    });
+    $(document).on('click', '.sentiment-button', function(e) {
+        var $commentsContainer = $(this).parent('.all-comments');
+        var $allSentimentContainers = $commentsContainer.find('.sentiment-list');
+        var $sentimentContainer = $commentsContainer.find('.sentiment-list[data-sentiment="' + $(this).attr('data-sentiment') + '"]');
+        $allSentimentContainers.hide();
+        $sentimentContainer.show();
 
-    $(document).on('click', '.neg-button', function(e) {
-        e.preventDefault();
-        var songId = $(".neg-button").val();
-        var comments = bl.getComments(songId);
-        if ($('.neg-button').parent().find('li').length > 0) {
-            $('.negative-list').show();
-            $('.positive-list').hide();
-            $('.neutral-list').hide();
-        } else {
-            for (var i = 0; i < comments[0].length; i++) {
-                $('.negative-list').show();
-                $('.positive-list').hide();
-                $('.neutral-list').hide();
-                $('.negative-list').append('<li>'+comments[0][i].text+'</li>');
-            }
-        }
-    });
-
-    $(document).on('click', '.neut-button', function(e) {
-        e.preventDefault();
-        var songId = $(".neut-button").val();
-        var comments = bl.getComments(songId);
-        if ($('.neut-button').parent().find('li').length > 0) {
-            $('.neutral-list').show();
-            $('.negative-list').hide();
-            $('.positive-list').hide();
-        } else {
-            for (var i = 0; i < comments[0].length; i++) {
-                $('.neutral-list').show();
-                $('.negative-list').hide();
-                $('.positive-list').hide();
-                $(".neutral-list").append('<li>'+comments[0][i].text+'</li>');
-            }
-        }
+        
     });
 
 

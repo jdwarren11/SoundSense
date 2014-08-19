@@ -98,6 +98,7 @@ SC.initialize({
                 // console.log('Found', tracks)
                 for (var i in tracks) {
                     // songOptionsHTML += '<input type="radio" name="song" value="'+tracks[i].id+'">' + tracks[i].title + '<br />';
+                    // searchHTML +='<tr><td><button class="button tiny addition" value="'+tracks[i].id+'">+</button></td><td>'+tracks[i].title+'</td><td>'+tracks[i].username+'</td></tr>';
                     searchHTML +='<tr><td><button class="button tiny addition" value="'+tracks[i].id+'">+</button></td><td>'+tracks[i].title+'</td><td>'+tracks[i].username+'</td></tr>';
                 }
            
@@ -186,25 +187,25 @@ SC.initialize({
             console.log(songObjects);
             bl.embedSong(songObjects);
             bl.chartData(songObjects);
-            bl.commentButtons(songObjects);
+            // bl.commentButtons(songObjects);
         };
 
         this.sendSong = function(songId) {
             store.getCommentsBySong(songId);
         };
 
-        this.getComments = function(songId) {
-            var song = store.getSongById(songId);
-            return song.sentiment;
-        };
+        // this.getComments = function(songId) {
+        //     var song = store.getSongById(songId);
+        //     return song.sentiment;
+        // };
 
-        this.commentButtons = function(songObjs) {
-            for (var i = 0; i < songObjs.length; i++) {
-                $('.all-comments .n'+i).append('<button class="pos-button" class="button tiny" value="'+songObjs[i].id+'">positive</button>');
-                $('.all-comments .n'+i).append('<button class="neg-button" class="button tiny" value="'+songObjs[i].id+'">negative</button>');
-                $('.all-comments .n'+i).append('<button class="neut-button" class="button tiny" value="'+songObjs[i].id+'">neutral</button>');
-            }
-        };
+        // this.commentButtons = function(songObjs) {
+        //     for (var i = 0; i < songObjs.length; i++) {
+        //         $('.all-comments .n'+i).append('<button class="pos-button" class="button tiny" value="'+songObjs[i].id+'">positive</button>');
+        //         $('.all-comments .n'+i).append('<button class="neg-button" class="button tiny" value="'+songObjs[i].id+'">negative</button>');
+        //         $('.all-comments .n'+i).append('<button class="neut-button" class="button tiny" value="'+songObjs[i].id+'">neutral</button>');
+        //     }
+        // };
 
         this.filter = function(com) {
             var filter = com.join(" ");
@@ -532,15 +533,46 @@ SC.initialize({
             });
 
             for (var i = 0; i < songs.length; i++) {
+                var temp = [
+                    '<div class="all-comments n'+i+'">',
+                        '<button class="button tiny pos sentiment-button" data-sentiment="positive" value="'+songs[i].id+'">Positive</button>',
+                        '<button class="button tiny neut sentiment-button" data-sentiment="neutral" value="'+songs[i].id+'">Neutral</button>',
+                        '<button class="button tiny neg sentiment-button" data-sentiment="negative" value="'+songs[i].id+'">Negative</button>',
+                    '</div>'
+                ].join('');
 
                 $('#sentiment-scatter').append('<div id="scatter'+i+'" style="width:720px; height:550px;"></div><br />');
-                $('#comments-div').append('<div class="all-comments n'+i+'"> \
-                    <button class="button tiny pos-button" value="'+songs[i].id+'">:))</button> \
-                    <button class="button tiny neut-button" value="'+songs[i].id+'">:||</button> \
-                    <button class="button tiny neg-button" value="'+songs[i].id+'">:((</button> \
-                    <div class="scroll"><div class="show-comments"><ul class="positive-list" style="display:none"></ul> \
-                    <ul class="negative-list" style="display:none"></ul><ul class="neutral-list" style="display:none"></ul> \
-                    </div></div></div><br />');
+                var $commentsContainer = $(temp);
+                var $commentPane = $('<div class="show-comments">');
+                var $posList = $('<ul class="sentiment-list" data-sentiment="positive" style="display:none"></ul>');
+                var $neuList = $('<ul class="sentiment-list" data-sentiment="neutral" style="display:none"></ul>');
+                var $negList = $('<ul class="sentiment-list" data-sentiment="negative" style="display:none"></ul>');
+                $commentsContainer.append($commentPane);
+                $commentPane.append($posList);
+                $commentPane.append($neuList);
+                $commentPane.append($negList);
+                var songComments = songs[i].sentiment;
+                for (var j = 0; j < songComments.length; j++) {
+                    for (var k = 0; k < songComments[j].length; k++) {
+                        var $songSentimentComments = $('<li>' + songComments[j][k].text + '</li>');
+                        switch (j) {
+                            case 0:
+                                $posList.append($songSentimentComments);
+                                break;
+                            case 1:
+                                $neuList.append($songSentimentComments);
+                                break;
+                            case 2:
+                                $negList.append($songSentimentComments);
+                                break;
+                            default:
+                                throw new Error('Wait, what?');
+                        }
+                    }
+                }
+
+                $('#comments-div').append($commentsContainer);
+                $commentsContainer.after('<br />');
 
                 var posData = $.map(songs[i].sentiment[0], function(series) {
                     return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];

@@ -33,19 +33,19 @@ iframe {
   display: inline-block;
 }
 
-.button.tiny.pos-button {
+.button.tiny.pos.sentiment-button {
   background: #90ee7e;
   padding: 10px;
   font-size: 14px;
 }
 
-.button.tiny.neg-button {
+.button.tiny.neg.sentiment-button {
   background: #f45b5b;
   padding: 10px;
   font-size: 14px;
 }
 
-.button.tiny.neut-button {
+.button.tiny.neut.sentiment-button {
   background: #2b908f;
   padding: 10px;
   font-size: 14px;
@@ -59,7 +59,12 @@ iframe {
 }
 
 .all-comments {
-  overflow-y: auto;
+  overflow-y: hidden;
+}
+
+.show-comments {
+  height: 100%;
+  overflow-y: scroll;
 }
 /*#play-songs {
   text-align: left;
