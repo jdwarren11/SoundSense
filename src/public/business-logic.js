@@ -560,6 +560,7 @@ SC.initialize({
             for (var i = 0; i < songs.length; i++) {
                 var temp = [
                     '<div class="all-comments n'+i+'">',
+                        '<p class="comment-display">Click to show comments</p>',
                         '<button class="button tiny pos sentiment-button" data-sentiment="positive" value="'+songs[i].id+'">Positive</button>',
                         '<button class="button tiny neut sentiment-button" data-sentiment="neutral" value="'+songs[i].id+'">Neutral</button>',
                         '<button class="button tiny neg sentiment-button" data-sentiment="negative" value="'+songs[i].id+'">Negative</button>',
@@ -600,13 +601,35 @@ SC.initialize({
                 $commentsContainer.after('<br />');
 
                 var posData = $.map(songs[i].sentiment[0], function(series) {
-                    return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
+                    // return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
+                    return {
+                        name: series.text,
+                        color: '#90ee7e',
+                        x: parseFloat(series.relevance),
+                        y: parseFloat(series.sentiment.score)
+                        // data: [parseFloat(series.relevance), parseFloat(series.sentiment.score)]
+                    }
                 });
+                console.log(posData);
                 var negData = $.map(songs[i].sentiment[1], function(series) {
-                    return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
+                    // return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
+                    return {
+                        name: series.text,
+                        color: '#f45b5b',
+                        x: parseFloat(series.relevance),
+                        y: parseFloat(series.sentiment.score)
+                        // data: [parseFloat(series.relevance), parseFloat(series.sentiment.score)]
+                    }
                 });
                 var neutData = $.map(songs[i].sentiment[2], function(series) {
-                    return [[parseFloat(series.relevance), 0]];
+                    // return [[parseFloat(series.relevance), 0]];
+                    return {
+                        name: series.text,
+                        color: '#2b908f',
+                        x: parseFloat(series.relevance),
+                        y: 0
+                        // data: [parseFloat(series.relevance), parseFloat(series.sentiment.score)]
+                    }
                 });
 
                 new Highcharts.Chart({
@@ -628,18 +651,26 @@ SC.initialize({
                             text: 'Sentiment Score'
                         }
                     },
+                    tooltip: {
+                        formatter: function() {
+                            return this.point.name;
+                        }
+                    },
                     series: [
                     {
-                        name: 'neutral',
-                        data: neutData
+                        // name: 'neutral',
+                        data: neutData,
+                        showInLegend: false
                         // data: [[0.7777777, 0.63], [0.411, 0.8]]
                     }, {
-                        name: 'positive',
-                        data: posData
+                        // name: 'positive',
+                        data: posData,
+                        showInLegend: false
                         // data: [[0.1, -0.2], [0.15, -0.63]]
                     }, {
-                        name: 'negative',
-                        data: negData
+                        // name: 'negative',
+                        data: negData,
+                        showInLegend: false
                         // data: [[0.22, 0.43], [0.11, 0.55]]
                     }]
                 });

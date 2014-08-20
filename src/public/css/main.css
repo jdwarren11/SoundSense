@@ -19,9 +19,48 @@ body{
   font-family: 'Roboto Condensed', sans-serif;
 }*/
 
+.top-bar {
+  height: 90px;
+}
+
+.title-area li {
+  display: inline;
+  float: left;
+  margin-left: 150px;
+}
+
+#pg-title {
+  font-size: 70px;
+  font-family: 'Roboto Condensed', sans-serif;
+  margin-top: 25px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+#pg-title a {
+  height: 90px;
+}
+
+#home-link a, #ex-link a {
+  font-size: 50px;
+}
+
+#pg-title a:hover {
+  font-family: black;
+}
+
+.right.side.stuff {
+  margin-right: 150px;
+  font-size: 50px;
+}
+
 iframe {
   height: 125px;
   width: 700px;
+}
+
+.info.para {
+  color: #f0f0f0;
 }
 
 #charts ul {
@@ -37,6 +76,7 @@ iframe {
   background: #90ee7e;
   padding: 10px;
   font-size: 14px;
+  margin-left: 15px;
 }
 
 .button.tiny.neg.sentiment-button {
@@ -60,6 +100,11 @@ iframe {
 
 .all-comments {
   overflow-y: hidden;
+}
+
+.comment-display {
+  margin-bottom: 0;
+  margin-left: 30px;
 }
 
 .show-comments {
@@ -217,6 +262,7 @@ a:link {
 a:visited {
     text-decoration: none;
 }
+
 
 
 

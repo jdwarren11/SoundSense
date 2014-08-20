@@ -28,7 +28,8 @@
         bl.analyzeSongs(songIds);
         $(".searchformbox").hide();
         $(".analyze-form-box").hide();
-        $('body').css('background', 'black');
+        $('body').css('background', 'url("../images/carbon_fibre.png")');
+        // $('body').css('background', '#f0f0f0');
         $("#charts").show();
 
     });
