@@ -28,8 +28,7 @@
         bl.analyzeSongs(songIds);
         $(".searchformbox").hide();
         $(".analyze-form-box").hide();
-        $('body').css('background', 'url("../images/carbon_fibre.png")');
-        // $('body').css('background', '#f0f0f0');
+        $('body').css('background', 'url("../images/hexabump.png")');
         $("#charts").show();
 
     });
@@ -50,8 +49,24 @@
         var $sentimentContainer = $commentsContainer.find('.sentiment-list[data-sentiment="' + $(this).attr('data-sentiment') + '"]');
         $allSentimentContainers.hide();
         $sentimentContainer.show();
+    });
 
-        
+    // $('#run-example').on('click', function(e) {
+    //     bl.runExample();
+    // });
+
+    $('.navtext.home').on('click', function(e) {
+        e.preventDefault();
+        window.location = '';
+    });
+
+    $('.navtext.example').on('click', function(e) {
+        e.preventDefault();
+        $(".searchformbox").hide();
+        $(".analyze-form-box").hide();
+        $('body').css('background', 'url("../images/hexabump.png")');
+        $("#charts").show();
+        bl.runExample();
     });
 
 

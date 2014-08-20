@@ -127,7 +127,7 @@ SC.initialize({
                 // console.log("Running", sentimentPromises.length)
                 return Promise.all(sentimentPromises);
             }).then(function(updateSentiment) {
-                console.log("Sentiment results:", updateSentiment);
+                // console.log("Sentiment results:", updateSentiment);
                 // console.log(updateSentiment.length);
                 // console.log(updateSentiment[0].keywords[4].text);
                 // debugger
@@ -153,7 +153,7 @@ SC.initialize({
                 console.log(song);
                 $('.analyze-list').append('<li data-id="'+song.id+'">'+song.title+"</li>");
                 $('#adding-song-text').hide();
-                // console.log(JSON.stringify(song));
+                console.log(JSON.stringify(song));
             });
         };
 
@@ -206,7 +206,7 @@ SC.initialize({
 
             }
             // send songObjects to charts view
-            console.log(songObjects);
+            // console.log(songObjects);
             bl.embedSong(songObjects);
             bl.chartData(songObjects);
             // bl.commentButtons(songObjects);
@@ -216,18 +216,12 @@ SC.initialize({
             store.getCommentsBySong(songId);
         };
 
-        // this.getComments = function(songId) {
-        //     var song = store.getSongById(songId);
-        //     return song.sentiment;
-        // };
-
-        // this.commentButtons = function(songObjs) {
-        //     for (var i = 0; i < songObjs.length; i++) {
-        //         $('.all-comments .n'+i).append('<button class="pos-button" class="button tiny" value="'+songObjs[i].id+'">positive</button>');
-        //         $('.all-comments .n'+i).append('<button class="neg-button" class="button tiny" value="'+songObjs[i].id+'">negative</button>');
-        //         $('.all-comments .n'+i).append('<button class="neut-button" class="button tiny" value="'+songObjs[i].id+'">neutral</button>');
-        //     }
-        // };
+        this.runExample = function() {
+            $.getJSON('example.json', function(data) {
+                bl.embedSong(data);
+                bl.chartData(data);
+            })
+        };
 
         this.filter = function(com) {
             var filter = com.join(" ");
@@ -610,7 +604,7 @@ SC.initialize({
                         // data: [parseFloat(series.relevance), parseFloat(series.sentiment.score)]
                     }
                 });
-                console.log(posData);
+                // console.log(posData);
                 var negData = $.map(songs[i].sentiment[1], function(series) {
                     // return [[parseFloat(series.relevance), parseFloat(series.sentiment.score)]];
                     return {

@@ -108,7 +108,7 @@ iframe {
 }
 
 .show-comments {
-  height: 100%;
+  height: 85%;
   overflow-y: scroll;
 }
 /*#play-songs {
@@ -120,13 +120,14 @@ h3{
 }
 .topbarstuff {
   margin-left: 120px;
-  margin-right: 120px;
+  margin-right: 190px;
 }
 .logo {
   float: left;
   color: white;
-  font-size: 70px;
+  font-size: 65px;
   background: url("../images/logo.png");
+  margin-left: 15px;
 }
 
 #input {
@@ -153,6 +154,7 @@ h3{
   opacity: inherit;
   display: inline-block;
   padding: 20px;
+  margin-top: 20px;
   width: 700px;
 }
 
@@ -220,7 +222,8 @@ h3{
 .nav {
   height: 100px;
   width: 100%;
-  background-color: black;
+  background-color: #202020;
+  border-bottom: 1px solid #acacac;
   positive: absolute;
   text-decoration: none;
 }
@@ -228,7 +231,7 @@ h3{
 .navtext {
   float: right;
   color: white;
-  padding: 30px;
+  padding: 26px;
   font-size: 30px;
   font-family: 'Roboto Condensed', sans-serif;
   text-decoration: none
