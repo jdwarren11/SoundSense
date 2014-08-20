@@ -69,6 +69,11 @@
         bl.runExample();
     });
 
+    $(document).on('click', '.remove-link', function(e) {
+        e.preventDefault();
+        $(this).parent('li').remove();
+    })
+
 
 
 // $('.analyze ul li').map(function (idx, elem) { return $(elem).data('id') })

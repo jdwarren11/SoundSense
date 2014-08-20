@@ -151,9 +151,9 @@ SC.initialize({
                 // debugger
                 store.addSentiment(songId, sentimentsArray);
                 console.log(song);
-                $('.analyze-list').append('<li data-id="'+song.id+'">'+song.title+"</li>");
+                $('.analyze-list').append('<li class="analyze-queue" data-id="'+song.id+'">'+song.title+'<a class= "remove-link" href="#" >remove</a></li>');
                 $('#adding-song-text').hide();
-                console.log(JSON.stringify(song));
+                // console.log(JSON.stringify(song));
             });
         };
 
