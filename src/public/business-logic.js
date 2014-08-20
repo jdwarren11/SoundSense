@@ -586,10 +586,10 @@ SC.initialize({
                                 $posList.append($songSentimentComments);
                                 break;
                             case 1:
-                                $neuList.append($songSentimentComments);
+                                $negList.append($songSentimentComments);
                                 break;
                             case 2:
-                                $negList.append($songSentimentComments);
+                                $neuList.append($songSentimentComments);
                                 break;
                             default:
                                 throw new Error('Wait, what?');
