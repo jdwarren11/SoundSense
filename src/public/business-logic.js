@@ -427,7 +427,7 @@ SC.initialize({
                     align: 'right',
                     verticalAlign: 'top',
                     x: -10,
-                    y: 50,
+                    y: 25,
                     floating: true,
                     borderWidth: 1, 
                     shadow: true
@@ -459,7 +459,7 @@ SC.initialize({
                     align: 'right',
                     verticalAlign: 'top',
                     x: -10,
-                    y: 50,
+                    y: 25,
                     floating: true,
                     borderWidth: 1, 
                     shadow: true
@@ -491,7 +491,7 @@ SC.initialize({
                     align: 'right',
                     verticalAlign: 'top',
                     x: -10,
-                    y: 50,
+                    y: 25,
                     floating: true,
                     borderWidth: 1, 
                     shadow: true
@@ -530,7 +530,12 @@ SC.initialize({
                     text: 'Sentiment Analysis'
                 },
                 xAxis: {
-                    categories: songTitles
+                    categories: songTitles,
+                    labels: {
+                        style: {
+                            width: '150px'
+                        }
+                    }
                 },
                 yAxis: {
                     title: {

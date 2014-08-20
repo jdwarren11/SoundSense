@@ -61,6 +61,9 @@ iframe {
 
 .info.para {
   color: #f0f0f0;
+  margin-left: 25px;
+  margin-right: 25px;
+
 }
 
 #charts ul {
@@ -120,7 +123,7 @@ h3{
 }
 .topbarstuff {
   margin-left: 120px;
-  margin-right: 190px;
+  margin-right: 200px;
 }
 .logo {
   float: left;

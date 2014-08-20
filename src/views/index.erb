@@ -17,7 +17,7 @@
       <div id="play-songs"></div>
     </div>
     <div class="content" id="panel2-2">
-      <p class="info para">These graphs show the keywords extracted from the sentiment analysis, their relevance, and their sentiment score. If you hover over something you can see a list of comments. It should be noted that depending on the genre, the sentiment is not always completely accurate. For example, a hip-hop or club song tends to have more profanity in the comments which is interpereted as negative sentiment, but really should be positive.</p>
+      <p class="info para">These graphs show the keywords extracted from the sentiment analysis. It plots them based on their relevance, and sentiment score. If you hover over a point you can see it's associated comment. It should be noted that depending on the genre, the sentiment is not always completely accurate. For example, a hip-hop or club song tends to have more profanity in the comments which is interpereted as negative sentiment, but really should be positive. (Sentiment Analysis is done using Alchemy API)</p>
       <div class="large-9 columns">
         <div id="sentiment-scatter"></div>
       </div>
@@ -26,24 +26,24 @@
       </div>
     </div>
     <div class="content" id="panel2-3">
-      <p class="info para">This graph shows the ratio of how many times a song has been played versus how many followers the user/artist who posted the song has.</p>
+      <p class="info para">This graph shows the ratio of how many times a song has been played versus how many followers the user/artist who posted the song has. It is a good metric to determine the popularity of a song. A higher ratio is indicative of a song that may have been shared and listened to across platforms other than SoundCloud, such as blogs and other websites.</p>
       <div id="play-follow" style="width:1000px; height:550px;"></div>
     </div>
 
     <div class="content" id="panel2-4">
-      <p class="info para">This graph shows the ratio of likes to comments. It is a good metric to determine engagement. For example, a high ratio could mean that people both liked and commented on a song, or that people didn't like the song, but commented (negatively) on it. The sentiment analysis of the song is meant to help determine which of these is true.</p>
+      <p class="info para">This graph shows the ratio of likes to comments. It is a good metric for determining engagement. For example, a high ratio could mean that people both liked and commented on a song, or that people didn't like the song, but commented (negatively) on it. The sentiment analysis of the song is meant to help determine which of these is true.</p>
       <div id="like-comment" style="width:1000px; height:550px;"></div>
     </div>
     <div class="content" id="panel2-5">
-      <p class="info para">This graph shows how many people engaged with the song by either liking or commenting on it relative to the number of followers the user/artist has.</p>
+      <p class="info para">This graph shows how many people engaged with the song by either liking or commenting on it relative to the number of followers the user/artist has. A low ratio means that it has a high level of engagement, however after an artist reaches upwards of 1 million followers, the engagement per song tends to drop off.</p>
       <div id="follow-like-com" style="width:1000px; height:550px;"></div>
     </div>
     <div class="content" id="panel2-6">
-      <p class="info para">This graph shows the number of comments posted over the length of the song. Most people post comments at the beginning or end of a song, however, with this metric, you can also determine "good" or "bad" parts of the song if there is a spike in the number.</p>
+      <p class="info para">This graph shows the number of comments posted over the length of the song. Most people post comments at the beginning or end of a song, however, with this metric, you can also infer "good" or "bad" parts of the song if there is a spike/drop in the number.</p>
       <div id="comments" style="width:1000px; height:550px;"></div>
     </div>
     <div class="content" id="panel2-7">
-      <p class="info para">This graph shows the total number of positive, negative, and neutral comments for each song.</p>
+      <p class="info para">This graph shows the total number of positive, negative, and neutral comments for each song. This is another visual of the sentiment analysis that stacks the songs next to each other. (Sentiment Analysis is done using Alchemy API)</p>
       <div id="sentiment" style="width:1000px; height:550px;"></div> 
     </div>
   </div>
@@ -55,7 +55,7 @@
       <form class="search-song">
           <!-- <p class="song-form-header">CHOOSE UP TO 4 SONGS</p> -->
         <div>
-          <input id="input" placeholder="search SoundCloud for songs" type="text" name="songsearch">
+          <input id="input" placeholder="SEARCH SOUNDCLOUD FOR SONGS" type="text" name="songsearch">
             <button id="search-button" class="button small">SEARCH</button>
             <!-- <button id="run-example" class="button small">See Example</button> -->
         </div>
