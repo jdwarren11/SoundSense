@@ -18,4 +18,4 @@ A web application to listen and compare different songs and their associated Sou
 
 Live Site: http://soundsense.herokuapp.com
 
-Technologies: JavaScript, jQuery, Foundation, Sinatra, SoundCloud API, Alchemy API, Heroku
+Technologies: JavaScript, jQuery, Highcharts, Foundation, Sinatra, SoundCloud API, Alchemy API, Heroku
