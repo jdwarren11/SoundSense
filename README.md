@@ -1,6 +1,6 @@
 # SoundSense
 
-A web application to listen and compare different songs and their associated SoundCloud analytics. Performs sentiment analysis on the comments of each selected song using Alchemy's API and visualizes the extracted keywords by their relevance and sentiment score. Also displays graphs comparing other analystics such as plays, likes, and followers.
+A web application to listen and compare different songs and their associated SoundCloud analytics. Performs sentiment analysis on the comments of each selected song using Alchemy's API and visualizes the extracted keywords by their relevance and sentiment score on a scatter plot. Also displays four other graphs comparing analytics ratios such as plays, likes, followers and comments over the length of the song.
 
 - Enter a song title or artist in the search bar to search SoundCloud
 - Click "add" button to add song to analyze queue
